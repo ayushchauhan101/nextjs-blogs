@@ -11,13 +11,25 @@ export default function Home(props) {
     )
 }
 
-// fetch and cache API response before even rendering
-// to eliminate use of useEffect and useState
+
 // will not fetch new data added after building and deploying
 export async function getStaticProps() {
     return {
-        props: {
-            meetups: fakeData,
-        }
+        props: { meetups: fakeData },
+        // to re-render or re-validate after following seconds
+        revalidate: 10,
     }
 }
+
+
+// // always run on the server; runs every request
+// export async function getServerSideProps(context) {
+//     // to get request and response data
+//     const req = context.req
+//     const res = context.res
+//     return {
+//         props: {
+//             meetups: fakeData
+//         }
+//     }
+// }
