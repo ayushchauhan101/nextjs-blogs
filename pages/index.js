@@ -5,8 +5,19 @@ const fakeData = [
     { id: 'm2', title: 'second meetup', image: 'https://images.unsplash.com/photo-1682949029799-c1c111344b6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=839&q=80', address: 'jodhpur', description: 'a peacock carving' },
 ]
 
-export default function Home() {
+export default function Home(props) {
     return (
-            <MeetupList meetups={fakeData} />
+        <MeetupList meetups={props.meetups} />
     )
+}
+
+// fetch and cache API response before even rendering
+// to eliminate use of useEffect and useState
+// will not fetch new data added after building and deploying
+export async function getStaticProps() {
+    return {
+        props: {
+            meetups: fakeData,
+        }
+    }
 }
