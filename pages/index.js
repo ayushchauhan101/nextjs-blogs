@@ -1,3 +1,4 @@
+import Layout from '../components/layout/Layout'
 import MeetupList from "../components/meetups/MeetupList"
 
 const fakeData = [
@@ -6,5 +7,9 @@ const fakeData = [
 ]
 
 export default function Home() {
-    return <MeetupList meetups={fakeData} />
+    return (
+        <Layout>
+            <MeetupList meetups={fakeData} />
+        </Layout>
+    )
 }
