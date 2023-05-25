@@ -1,6 +1,8 @@
 import NewMeetupForm from "@/components/meetups/NewMeetupForm"
+import { useRouter } from "next/router"
 
 export default function AllMeetups() {
+    const router = useRouter()
 
     async function addMeetupHandler(enteredData) {
         console.log(enteredData)
@@ -16,6 +18,9 @@ export default function AllMeetups() {
         const data = await response.json()
 
         console.log(data)
+
+        // redirect to the home page after inserting the data
+        router.push('/')
     }
 
 
