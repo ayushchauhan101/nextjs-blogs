@@ -7,7 +7,7 @@ async function handler(req, res) {
         const data = req.body
 
         // mongodb+srv://<username>:<password>@<cluster-name>.<region>.mongodb.net/<database-name>
-        const client = await MongoClient.connect('mongodb+srv://ayush:new_mongoDB@cluster0.4vg9aiz.mongodb.net/meetups?retryWrites=true&w=majority')
+        const client = await MongoClient.connect('mongodb+srv://ayush:new_mongoDB@cluster0.4vg9aiz.mongodb.net/meetups?retryWrites=true&w=majority', { family: 4 })
         const db = client.db()
 
         const meetupsCollection = db.collection('meetups')

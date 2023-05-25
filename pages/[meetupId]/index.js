@@ -1,49 +1,71 @@
+import { MongoClient, ObjectId } from "mongodb"
 import { useRouter } from "next/router"
 import MeetupDetail from "@/components/meetups/MeetupDetail"
 
-export default function Meetup() {
+export default function Meetup(props) {
     const router = useRouter()
 
     const meetupId = router.query.meetupId
-    console.log('Currently at page: ',meetupId)
+    console.log('Currently at page: ', meetupId)
 
     return (
         <>
             <MeetupDetail
-                image='https://images.unsplash.com/photo-1580934738416-ad531f2920f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bWV4aWNvJTIwY2l0eXxlbnwwfDB8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60'
-                title='Mexico city plaza'
-                address='Mexico city'
-                description='Busy plaza in mexico city'
+                image={props.meetupData.image}
+                title={props.meetupData.title}
+                address={props.meetupData.address}
+                description={props.meetupData.description}
             />
         </>
     )
 }
 
 export async function getStaticPaths() {
+
+    const client = await MongoClient.connect('mongodb+srv://ayush:new_mongoDB@cluster0.4vg9aiz.mongodb.net/meetups?retryWrites=true&w=majority', { family: 4 })
+    const db = client.db()
+    const meetupsCollection = db.collection('meetups')
+
+    // only fetching id fields
+    const returnedMeetups = await meetupsCollection.find({}, { _id: 1 }).toArray()
+
+    client.close()
+
     return {
-        // if true nextJS tries to generate a new page itself
         // if fallback true then params not defined will return a 404
         fallback: false,
-        paths: [
-            { params: { meetupId: 'm1' } },
-            { params: { meetupId: 'm2' } },
-        ]
+        paths: returnedMeetups.map(meetup => (
+            {
+                // params will be the mongoDB document _id 
+                params: { meetupId: meetup._id.toString() }
+            }
+        ))
     }
 }
 
 // this code runs during build time; runs in server side and not broswer in dev environment
 export async function getStaticProps(context) {
-    // to fetch data for a single meetup
+    // extract an id from the url and use it to find from mongoDB server
     const meetupId = context.params.meetupId
+
+    const client = await MongoClient.connect('mongodb+srv://ayush:new_mongoDB@cluster0.4vg9aiz.mongodb.net/meetups?retryWrites=true&w=majority', { family: 4 })
+    const db = client.db()
+    const meetupsCollection = db.collection('meetups')
+
+    // only fetch one single document by _id
+    // ObjectId to parse only the id and ignore 'ObjectId' string
+    const selectedMeetup = await meetupsCollection.findOne({ _id: new ObjectId(meetupId) })
+    console.log(selectedMeetup)
+    client.close()
 
     return {
         props: {
             meetupData: {
-                image: 'https://images.unsplash.com/photo-1580934738416-ad531f2920f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bWV4aWNvJTIwY2l0eXxlbnwwfDB8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60',
-                id: meetupId,
-                title: 'Mexico city plaza',
-                address: 'Mexico city',
-                description: 'Busy plaza in mexico city',
+                id: selectedMeetup._id.toString(),
+                title: selectedMeetup.title,
+                address: selectedMeetup.address,
+                image: selectedMeetup.image,
+                description: selectedMeetup.description,
             }
         }
     }
