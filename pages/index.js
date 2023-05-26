@@ -1,9 +1,16 @@
+import Head from "next/head"
 import { MongoClient } from "mongodb"
 import MeetupList from "../components/meetups/MeetupList"
 
 export default function Home(props) {
     return (
-        <MeetupList meetups={props.meetups} />
+        <>
+            <Head>
+                <title>Meetups organiser</title>
+                <meta name='description' content="Add and view meetups with your friends" />
+            </Head>
+            <MeetupList meetups={props.meetups} />
+        </>
     )
 }
 
