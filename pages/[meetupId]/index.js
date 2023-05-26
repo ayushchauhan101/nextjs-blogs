@@ -38,7 +38,7 @@ export async function getStaticPaths() {
 
     return {
         // if fallback true then params not defined will return a 404
-        fallback: false,
+        fallback: true,
         paths: returnedMeetups.map(meetup => (
             {
                 // params will be the mongoDB document _id 
