@@ -17,7 +17,7 @@ export default function Home(props) {
 // will not fetch new data added after building and deploying
 export async function getStaticProps() {
 
-    const client = await MongoClient.connect('mongodb+srv://ayush:new_mongoDB@cluster0.4vg9aiz.mongodb.net/meetups?retryWrites=true&w=majority', { family: 4 })
+    const client = await MongoClient.connect(`mongodb+srv://ayush:${process.env.mongoPassword}@cluster0.4vg9aiz.mongodb.net/meetups?retryWrites=true&w=majority`, { family: 4 })
     const db = client.db()
     const meetupsCollection = db.collection('meetups')
 

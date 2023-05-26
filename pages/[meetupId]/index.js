@@ -27,7 +27,7 @@ export default function Meetup(props) {
 
 export async function getStaticPaths() {
 
-    const client = await MongoClient.connect('mongodb+srv://ayush:new_mongoDB@cluster0.4vg9aiz.mongodb.net/meetups?retryWrites=true&w=majority', { family: 4 })
+    const client = await MongoClient.connect(`mongodb+srv://ayush:${process.env.mongoPassword}@cluster0.4vg9aiz.mongodb.net/meetups?retryWrites=true&w=majority`, { family: 4 })
     const db = client.db()
     const meetupsCollection = db.collection('meetups')
 
@@ -53,7 +53,7 @@ export async function getStaticProps(context) {
     // extract an id from the url and use it to find from mongoDB server
     const meetupId = context.params.meetupId
 
-    const client = await MongoClient.connect('mongodb+srv://ayush:new_mongoDB@cluster0.4vg9aiz.mongodb.net/meetups?retryWrites=true&w=majority', { family: 4 })
+    const client = await MongoClient.connect(`mongodb+srv://ayush:${process.env.mongoPassword}@cluster0.4vg9aiz.mongodb.net/meetups?retryWrites=true&w=majority`, { family: 4 })
     const db = client.db()
     const meetupsCollection = db.collection('meetups')
 
