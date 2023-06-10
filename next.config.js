@@ -2,8 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    customKey : 'my-value-from-env',
-    mongoPassword : 'new_mongoDB'
+    customKey: 'my-value-from-env',
+    mongoPassword: process.env.NEXT_PUBLIC_API_KEY
   }
 }
 
